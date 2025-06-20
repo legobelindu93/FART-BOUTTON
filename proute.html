@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr"></html>
+<head>
+    <meta charset="UTF-8" />
+    <title>fartboutton</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+   <h1>FART BOUTTON</h1>
+    <p>CLIC SUR LE BOUTON !!!</p>
+    <img src="image.json" alt="" id="fartImage">
+    <button id="fartButton" onclick="document.getElementById('pet1').play()">FART</button>
+    <audio id="pet1" src="son/dry-fart.mp3"></audio>
+    <p>Tu as pété <span id="counter">0</span> fois !</p>
+    
+
+<script>
+let count = 0;
+let imageList = [];
+let currentIndex = 0;
+
+// Charger la liste des images
+fetch("image.json")
+  .then((res) => res.json())
+  .then((data) => {
+    imageList = data;
+  });
+
+const counter = document.getElementById('counter');
+const btn = document.getElementById('fartButton');
+const body = document.body;
+
+// Crée un overlay pour le fondu du background
+const bgOverlay = document.createElement('div');
+bgOverlay.style.position = 'fixed';
+bgOverlay.style.top = 0;
+bgOverlay.style.left = 0;
+bgOverlay.style.width = '100vw';
+bgOverlay.style.height = '100vh';
+bgOverlay.style.zIndex = '-1';
+bgOverlay.style.opacity = '0';
+bgOverlay.style.transition = 'opacity 0.7s';
+bgOverlay.style.backgroundSize = 'cover';
+bgOverlay.style.backgroundPosition = 'center';
+document.body.appendChild(bgOverlay);
+
+btn.onclick = () => {
+  count++;
+  counter.textContent = count;
+  document.getElementById('pet1').play();
+
+  if (imageList.length === 0) return;
+
+  // Affiche l'image en background
+  bgOverlay.style.backgroundImage = `url('${imageList[currentIndex]}')`;
+  bgOverlay.style.opacity = '1';
+
+  setTimeout(() => {
+    bgOverlay.style.opacity = '0';
+  }, 2000);
+
+  currentIndex = (currentIndex + 1) % imageList.length;
+};
+</script>
+<div>
+  <div id="imageZone"></div>
+</div>
+  
+
+<script src="rotation-image.js"></script>
+</body>
+</html>
